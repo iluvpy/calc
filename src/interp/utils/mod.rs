@@ -80,6 +80,7 @@ pub fn find_subexpr(input: &String) -> structs::SubExpr {
 	let operators: Vec<char> = OPERATORS.chars().collect();
 	let index = input.find('(');
 	if index != None {
+		println!("found opening bracket!");
 		let index_ = index.unwrap();
 		start = index_;
 		for i in index_+1..chars.len() {
@@ -89,7 +90,7 @@ pub fn find_subexpr(input: &String) -> structs::SubExpr {
 			expr.push(chars[i]);
 		}
 		for operator in operators {
-			let index_ = input.find(operator);
+			let index_ = expr.find(operator);
 			if index_ != None {
 				operator_char = operator;
 				break;
@@ -118,7 +119,12 @@ pub fn find_subexpr(input: &String) -> structs::SubExpr {
 		} 
 		else {
 			// found index and thus i need to go back to the start of the expression
-			let mut index_ = op_index.unwrap()-1;
+			let mut index_ = op_index.unwrap();
+			if index_ != 0 { 
+				index_ -= 1;
+			} else { // this means we are at the end of the expression i think
+				last_expr = true;
+			}
 			loop {
 				if is_number(chars[index_]) {
 					expr.push(chars[index_]);
@@ -134,8 +140,13 @@ pub fn find_subexpr(input: &String) -> structs::SubExpr {
 				}
 				
 			}
-			println!("set start to {}", start);
-			start = index_;
+			println!("set start to {}", index_);
+			start = index_; 
+			if !chars[start].is_ascii_digit() {
+				start += 1;
+			}
+			println!("char at start: {}", chars[index_]);
+
 			expr = expr.chars().rev().collect::<String>(); // invert
 			expr.push(chars[op_index.unwrap()]);
 			index_ = op_index.unwrap()+1;

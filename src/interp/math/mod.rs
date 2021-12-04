@@ -1,12 +1,12 @@
 use super::structs;
-use super::OPERATORS;
-use super::utils;
-
 
 // calculates for example y*x or y+x etc
 pub fn calc_subexpression(subexpr: &structs::SubExpr) -> String {
 	let numbers: Vec<&str> = subexpr.expr.split(subexpr.operator).collect();
 
+	if subexpr.expr == "" {
+		return String::from("");
+	}
 	if numbers.len() == 1 {
 		return String::from(numbers[0]);
 	}

@@ -37,22 +37,22 @@ pub fn interpret(data: &mut InterpData) {
 	println!("interpreter started");
 	loop {
 		let subexpr = utils::find_subexpr(&data.input);
-		
-		let start = subexpr.start;
-		let result = math::calc_subexpression(&subexpr);
-		//println!("result: {}", result);
 		if subexpr.last_expr { // this was the last expression
 			break;
 		}
-		//println!("input: {}", data.input);
+		let start = subexpr.start;
+		let result = math::calc_subexpression(&subexpr);
+		println!("result: {}", result);		
+		println!("before: {}", data.input);
 		let len = subexpr.start + subexpr.expr.len();
+		println!("start: {} and finish: {}", start, len);
 		if subexpr.has_parenthesis {
-			data.input.replace_range(start..len+1, ""); // remove the closing parenthesis ')'
+			data.input.replace_range(start..len+2, &result); // remove the closing parenthesis ')'
 		} 
-		else { 
-			data.input.replace_range(start..len, "");
+		else {
+			data.input.replace_range(start..len, &result);
 		}
-		data.input.insert_str(start, &result);
+		println!("after insert: {}", data.input);
 	}
 
 	println!("result: {}", data.input);
