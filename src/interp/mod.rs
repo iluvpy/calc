@@ -1,4 +1,4 @@
-
+use std::time::Instant;
 mod math;
 mod structs;
 pub mod utils;
@@ -35,6 +35,7 @@ pub fn argument(input: &String) {
 
 pub fn interpret(data: &mut InterpData) {
 	println!("interpreter started");
+	let start_time = Instant::now();
 	loop {
 		let subexpr = utils::find_subexpr(&data.input);
 		if subexpr.last_expr { // this was the last expression
@@ -57,6 +58,6 @@ pub fn interpret(data: &mut InterpData) {
 
 	println!("result: {}", data.input);
 	
-	println!("interpreter finished");
+	println!("interpreter finished in {:?}", start_time.elapsed());
 }
 
